@@ -16,7 +16,8 @@
     "react-dom": "^18",
     "react-hook-form": "^7.51.4",
     "react-icons": "^5.2.0",
-    "react-qr-code": "^2.0.12"
+    "react-qr-code": "^2.0.12",
+    "react-toastify": "^10.0.5"
   },
   "devDependencies": {
     "eslint": "^8",

@@ -1,11 +1,13 @@
-import { supabase } from "@/app/page";
-import { useEffect, useState } from "react";
+import { HomeContext, supabase } from "@/app/page";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 // icons
 import { FaChevronDown } from "react-icons/fa";
 
 const Calculator = () => {
+  let { setItems, items } = useContext(HomeContext);
+
   // calculator field variables
   const types = ["plastic", "metal", "glass", "paper", "e-waste", "battery"];
   const [prices, setPrices] = useState(null);
@@ -13,18 +15,39 @@ const Calculator = () => {
   const [currentPrice, setCurrentPrice] = useState("1.50");
   const [currentUnit, setCurrentUnit] = useState("kg");
   const [currentType, setCurrentType] = useState("plastic");
+  const [currentQuantity, setCurrentQuantity] = useState(0);
   const [total, setTotal] = useState(0.0);
 
   // form variables
   const {
     register,
     handleSubmit,
+    resetField,
     watch,
     formState: { errors },
   } = useForm();
 
+  // add item
+  const addItem = () => {
+    const newItem = {
+      item: currentItem,
+      price: currentPrice,
+      unit: currentUnit,
+      quantity: currentQuantity.toString(),
+      total: total.toString(),
+    };
+
+    setItems([...items, newItem]);
+
+    // clear fields
+    setTotal(0.0);
+    resetField("quantity");
+  };
+
   // change total
   const changeTotal = (quantity) => {
+    setCurrentQuantity(quantity);
+
     const calculation = quantity * parseFloat(currentPrice);
 
     setTotal(calculation);
@@ -63,7 +86,19 @@ const Calculator = () => {
   };
 
   // submit function for the calculator
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    const newItem = {
+      item: data.item,
+      price: data.price,
+      unit: data.unit,
+      quantity: data.quantity,
+      total: total,
+    };
+
+    items.push(newItem);
+
+    setItems(items);
+  };
 
   // get the prices table data
   const getPricelist = async () => {
@@ -186,11 +221,14 @@ const Calculator = () => {
             />
           </div>
         </div>
-
-        <button className="bg-green-600 hover:bg-green-700 rounded-lg text-lg text-white p-2 mt-3">
-          Add Item
-        </button>
       </form>
+      <button
+        onClick={addItem}
+        disabled={!(total > 0)}
+        className="bg-green-600 disabled:bg-gray-300 hover:bg-green-700 rounded-lg text-lg text-white p-2 mt-3"
+      >
+        Add Item
+      </button>
     </div>
   );
 };
