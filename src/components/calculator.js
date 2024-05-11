@@ -57,6 +57,11 @@ const Calculator = () => {
   const changeType = (newType) => {
     setCurrentType(newType);
     console.log(newType);
+
+    // chnage item
+    const nextItems = prices.filter((price) => price["type"] == newType);
+    const firstItem = nextItems[0]["itemName"];
+    changeItem(firstItem);
   };
 
   // change item
