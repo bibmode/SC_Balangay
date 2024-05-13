@@ -143,8 +143,10 @@ const Calculator = () => {
                 onChange={(e) => changeType(e.target.value)}
                 className="block appearance-none w-full bg-white border-2 border-green-600 text-gray-700 py-3 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-green-50 focus:border-green-600"
               >
-                {types.map((type) => (
-                  <option value={type}>{type}</option>
+                {types.map((type, index) => (
+                  <option key={`option-${index}`} value={type}>
+                    {type}
+                  </option>
                 ))}
               </select>
 
@@ -166,8 +168,11 @@ const Calculator = () => {
                 {prices != null ? (
                   prices
                     .filter((price) => price["type"] == currentType)
-                    .map((price) => (
-                      <option value={price["itemName"]}>
+                    .map((price, index) => (
+                      <option
+                        key={`priceitem-${index}`}
+                        value={price["itemName"]}
+                      >
                         {price["itemName"]}
                       </option>
                     ))
